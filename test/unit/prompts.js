@@ -7,15 +7,17 @@
 
 const path = require('path')
 const assert = require('assert')
-const helpers = require('yeoman-test')
 const fs = require('fs')
 
-describe('Generator Prompts', function () {
+describe('Generator Prompts', async function () {
+  const yeomanTest = await import('yeoman-test')
+  const helpers = new yeomanTest.YeomanTest()
+
   describe('Templating Engine', function () {
     it('Should use multiple view engines and templating extensions', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           templatingEngine: true,
           templatingEngineName1: 'test1',
@@ -43,7 +45,7 @@ describe('Generator Prompts', function () {
     it('Should set the HTTPS Port to a custom port', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           enableHTTPS: true,
           httpsPortNumber: 'Custom',
@@ -64,7 +66,7 @@ describe('Generator Prompts', function () {
     it('Should set the HTTPS Port to a random port', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           enableHTTPS: true,
           httpsPortNumber: 'Random'
@@ -84,7 +86,7 @@ describe('Generator Prompts', function () {
     it('Should set the CSS preprocessor to LESS', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           cssCompiler: 'Less'
         })
@@ -101,14 +103,13 @@ describe('Generator Prompts', function () {
         }
       })
 
-      runner.assertFile('statics/css/more.less')
       runner.assertFile('statics/css/styles.less')
     })
 
     it('Should set the CSS preprocessor to SASS', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           cssCompiler: 'Sass'
         })
@@ -125,14 +126,13 @@ describe('Generator Prompts', function () {
         }
       })
 
-      runner.assertFile('statics/css/more.scss')
       runner.assertFile('statics/css/styles.scss')
     })
 
     it('Should set the CSS preprocessor to none', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           cssCompiler: 'none'
         })
@@ -156,7 +156,7 @@ describe('Generator Prompts', function () {
     it('Should setup a default webpack config', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           webpack: true
         })
@@ -195,7 +195,7 @@ describe('Generator Prompts', function () {
     it('Should disable webpack when set to off', async function () {
       const runner = await helpers
         .create(path.join(__dirname, '../../generators/app'))
-        .withPrompts({
+        .withAnswers({
           configMode: 'Customize',
           webpack: false
         })

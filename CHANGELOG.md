@@ -4,6 +4,69 @@
 
 - Put your changes here...
 
+## 0.21.11
+
+- Added generator version to console output.
+- Various dependencies updated.
+
+## 0.21.10
+
+- Altered default global model to prevent a common race condition.
+- Various dependencies updated.
+
+## 0.21.9
+
+- Added `eslint-plugin-html` to the default devDependency list.
+- Fixed typo in CLI output when app is generated.
+- Various dependencies updated.
+
+## 0.21.8
+
+- Various dependencies updated.
+
+## 0.21.7
+
+- Fixed issue that would cause `npx mkroosevelt` to return an undefined variable in its output.
+- Refactored deprecated APIs.
+- Various dependencies updated.
+
+## 0.21.6
+
+- Fixed bug with template rendering in generated apps.
+- Various dependencies updated.
+
+## 0.21.5
+
+- Various refactoring.
+- Various dependencies updated.
+
+## 0.21.4
+
+- Fixed bug resulting in a non-fatal error when generating apps.
+
+## 0.21.3
+
+- Enabled source-maps on webpack by default.
+- Pinned deps.
+- Various dependencies bumped.
+
+## 0.21.2
+
+- Improvements to the SPA variant of the generator.
+- Various dependencies bumped.
+
+## 0.21.1
+
+- Added a README.md to the list of files generated for sample apps.
+- Improved clarity of command line output.
+- Improved docs.
+- Various dependencies bumped.
+
+## 0.21.0
+
+- Fixed certs generator npm script.
+- Various dependencies bumped.
+
 ## 0.20.0
 
 - Various dependencies bumped.

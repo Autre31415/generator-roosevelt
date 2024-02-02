@@ -2,8 +2,6 @@ const Generator = require('yeoman-generator')
 const helper = require('./promptingHelpers')
 const defaults = require('./templates/defaults.json')
 const beautify = require('gulp-beautify')
-const filter = require('gulp-filter')
-const terminalLink = require('terminal-link')
 const selfsigned = require('selfsigned')
 
 const cache = {}
@@ -45,6 +43,8 @@ module.exports = class extends Generator {
       this.spaMode = false
       return true
     }
+
+    if (process.env.npm_command !== 'test') console.log(`  🧸 Roosevelt app generator (version ${require('../../package').version}${require('path').resolve(__dirname, '../../.gitignore') ? ' [development mode]' : ''})\n`)
 
     return this.prompt(
       [
@@ -425,7 +425,8 @@ module.exports = class extends Generator {
     }
   }
 
-  writing () {
+  async writing () {
+    const filter = (await import('gulp-filter')).default
     const jsonFilter = filter(['**/*.json'], { restore: true, dot: true })
 
     this.log('Generating SSL certs...')
@@ -517,6 +518,14 @@ module.exports = class extends Generator {
     this.fs.copy(
       this.templatePath('_.gitignore'),
       this.destinationPath('.gitignore')
+    )
+
+    this.fs.copyTpl(
+      this.templatePath('README.md.ejs'),
+      this.destinationPath('README.md'),
+      {
+        appName: this.appName
+      }
     )
 
     // models
@@ -684,10 +693,6 @@ module.exports = class extends Generator {
           this.templatePath('statics/css/less/styles.less'),
           this.destinationPath('statics/css/styles.less')
         )
-        this.fs.copy(
-          this.templatePath('statics/css/less/more.less'),
-          this.destinationPath('statics/css/more.less')
-        )
       }
     } else if (this.cssExt === 'scss') {
       if (this.spaMode) {
@@ -715,10 +720,6 @@ module.exports = class extends Generator {
         this.fs.copy(
           this.templatePath('statics/css/sass/styles.scss'),
           this.destinationPath('statics/css/styles.scss')
-        )
-        this.fs.copy(
-          this.templatePath('statics/css/sass/more.scss'),
-          this.destinationPath('statics/css/more.scss')
         )
       }
     } else if (this.cssExt === 'styl') {
@@ -788,14 +789,22 @@ module.exports = class extends Generator {
   }
 
   end () {
-    if (!this.options['skip-closing-message']) {
-      this.log(`\nYour app ${this.appName} has been generated.\n`)
-      this.log('To run the app:')
-      this.log('- To run in dev mode:   npm run dev')
-      this.log('- To run in prod mode:  npm run prod')
-      const url = 'https://localhost:' + this.httpsPort
-      this.log('Once running, visit ' + terminalLink(url, url) + '\n')
-      this.log('To make further changes to the config, edit package.json. See https://github.com/rooseveltframework/roosevelt#configure-your-app-with-parameters for information on the configuration options.')
-    }
+    ;(async () => {
+      const terminalLinkPkg = await import('terminal-link')
+      const terminalLink = terminalLinkPkg.default
+
+      if (!this.options['skip-closing-message']) {
+        this.log(`\nYour app ${this.appName} has been generated.\n`)
+        this.log('To run the app:')
+        this.log('- Change to your app directory:  cd ' + this.dirname)
+        this.log('- Install dependencies:          npm i')
+        this.log('- To run in development mode:    npm run d')
+        this.log('- To run in production mode:     npm run p')
+        const url = 'https://localhost:' + this.httpsPort
+        const help = 'https://github.com/rooseveltframework/roosevelt#configure-your-app-with-parameters'
+        this.log('- Once running, visit:           ' + terminalLink(url, url) + '\n')
+        this.log('To make further changes to the config, edit package.json. See ' + terminalLink(help, help) + ' for information on the configuration options.')
+      }
+    })()
   }
 }

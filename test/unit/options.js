@@ -2,11 +2,11 @@
 
 const path = require('path')
 const assert = require('assert')
-const helpers = require('yeoman-test')
 const defaults = require('../../generators/app/templates/defaults.json')
 const defaultFiles = [
   '.gitignore',
   '.stylelintrc.json',
+  'README.md',
   'app.js',
   'package.json',
   'rooseveltConfig.json',
@@ -18,14 +18,16 @@ const defaultFiles = [
   'mvc/views/homepage.html',
   'mvc/views/robots.txt',
   'mvc/views/layouts/main.html',
-  'statics/css/more.less',
   'statics/css/styles.less',
   'statics/images/favicon.ico',
   'statics/images/teddy.jpg',
   'statics/js/main.js'
 ]
 
-describe('generator options', function () {
+describe('generator options', async function () {
+  const yeomanTest = await import('yeoman-test')
+  const helpers = new yeomanTest.YeomanTest()
+
   let runner
 
   describe('Should automatically do a standard install with -s', function () {
